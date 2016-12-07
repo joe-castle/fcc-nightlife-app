@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 function Bars({ bars, handleGoingClick }) {
   return (
@@ -22,21 +23,33 @@ export class App extends React.Component {
     super();
 
     this.state = {
+      authenticated: false,
       bars: [],
     };
+  }
+
+  componentDidMount() {
+    this.setState(window.__INITIAL_STATE__);
   }
 
   handleSubmit = ev => {
     ev.preventDefault();
 
-    fetch(`/api/bars?city=${this.cityInput.value}`)
-      .then(res => res.json())
-      .then(bars => { this.setState({ bars })})
+    axios.get(`/api/bars?city=${this.cityInput.value}`)
+      .then(bars => { this.setState({ bars: bars.data })})
       .catch(error => console.log('error', error))
   }
 
   handleGoingClick = id => {
-
+    if (this.state.authenticated) {
+      axios.put(`/api/bars?id=${id}`)
+        .then(console.log)
+        .catch(console.log)
+    } else {
+      axios.get('/auth/twitter')
+        .then(console.log)
+        .catch(console.log)
+    }
   }
 
   render() {

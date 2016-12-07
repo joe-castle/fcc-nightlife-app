@@ -3,7 +3,7 @@ import { renderToString } from 'react-dom/server';
 // TODO: Update description
 // TODO: Update title
 
-export default el => (
+export default (el, state) => (
 `<!DOCTYPE html>
 <html>
   <head>
@@ -15,6 +15,9 @@ export default el => (
   </head>
   <body>
     <div id="root">${renderToString(el)}</div>
+    <script>
+      window.__INITIAL_STATE__ = ${JSON.stringify(state)}
+    </script>
     <script src="/assets/bundle.js"></script>
   </body>
 </html>`
