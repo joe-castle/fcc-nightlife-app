@@ -29,28 +29,53 @@ function Bars(_ref) {
 
   return _react2.default.createElement(
     'section',
-    null,
+    { style: {
+        marginTop: '20px'
+      } },
     bars.map(function (bar) {
       return _react2.default.createElement(
         'section',
-        { key: bar.id },
-        _react2.default.createElement('img', { src: bar.img_url, alt: bar.name }),
+        {
+          key: bar.id,
+          style: {
+            background: '#a2a5d5',
+            border: '3px solid #3a4bb8',
+            marginBottom: '10px',
+            padding: '10px',
+            textAlign: 'center'
+          }
+        },
+        _react2.default.createElement('img', {
+          style: {
+            border: '3px solid #3a4bb8',
+            borderRadius: '50%',
+            padding: '3px'
+          },
+          src: bar.img_url,
+          alt: bar.name
+        }),
         _react2.default.createElement(
-          'h4',
+          'h2',
           null,
           bar.name
         ),
         _react2.default.createElement(
-          'p',
-          null,
-          bar.description
+          'button',
+          {
+            onClick: function onClick() {
+              return handleGoingClick(bar.id);
+            },
+            style: {
+              border: '1px solid #3a4bb8',
+              padding: '10px'
+            }
+          },
+          bar.going.length + ' Going'
         ),
         _react2.default.createElement(
-          'button',
-          { onClick: function onClick() {
-              return handleGoingClick(bar.id);
-            } },
-          bar.going.length + ' Going'
+          'p',
+          { style: { fontStyle: 'italic' } },
+          '"' + bar.description + '"'
         )
       );
     })
@@ -69,26 +94,48 @@ var App = exports.App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
     _this.handleSubmit = function (ev) {
-      ev.preventDefault();
+      ev && ev.preventDefault();
 
-      _axios2.default.get('/api/bars?city=' + _this.cityInput.value).then(function (bars) {
-        _this.setState({ bars: bars.data });
+      _this.setState({ fetching: true });
+
+      _axios2.default.get('/api/bars?city=' + _this.state.cityInput).then(function (_ref2) {
+        var data = _ref2.data;
+        _this.setState({ bars: data, fetching: false });
       }).catch(function (error) {
-        return console.log('error', error);
+        console.log('error', error);
+        _this.setState({ fetching: false });
       });
+    };
+
+    _this.handleChange = function (ev) {
+      _this.setState({ cityInput: ev.target.value });
     };
 
     _this.handleGoingClick = function (id) {
       if (_this.state.authenticated) {
-        _axios2.default.put('/api/bars?id=' + id).then(console.log).catch(console.log);
+        _axios2.default.put('/api/bars?bar=' + id).then(function (_ref3) {
+          var data = _ref3.data;
+
+          var newBars = _this.state.bars.slice(0);
+          var index = newBars.findIndex(function (bar) {
+            return bar.id === id;
+          });
+
+          newBars[index].going = data;
+
+          _this.setState({ bars: newBars });
+        }).catch(console.log);
       } else {
-        _axios2.default.get('/auth/twitter').then(console.log).catch(console.log);
+        // Only way I could get over CORS issue, sending a get request would fail.
+        window.open('/auth/twitter', '_self');
       }
     };
 
     _this.state = {
-      authenticated: false,
-      bars: []
+      bars: [],
+      lastSearch: '',
+      cityInput: '',
+      fetching: false
     };
     return _this;
   }
@@ -96,13 +143,29 @@ var App = exports.App = function (_React$Component) {
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      this.setState(window.__INITIAL_STATE__);
+      var _this2 = this;
+
+      var _window$__INITIAL_STA = window.__INITIAL_STATE__,
+          lastSearch = _window$__INITIAL_STA.lastSearch,
+          authenticated = _window$__INITIAL_STA.authenticated;
+
+
+      this.setState({
+        authenticated: authenticated,
+        lastSearch: lastSearch,
+        cityInput: lastSearch
+      });
+
+      if (authenticated) {
+        // Settimeout to ensure handleSubmit has correct cityInput as setState is async.
+        setTimeout(function () {
+          return _this2.handleSubmit();
+        }, 0);
+      }
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this2 = this;
-
       return _react2.default.createElement(
         'div',
         { className: 'App' },
@@ -110,32 +173,43 @@ var App = exports.App = function (_React$Component) {
           'main',
           { style: {
               margin: '0 auto',
-              maxWidth: '800px'
+              maxWidth: '800px',
+              padding: '10px',
+              textAlign: 'center'
             } },
           _react2.default.createElement(
             'h1',
             { style: {
-                fontSize: '3em',
-                textAlign: 'center'
+                fontSize: '3em'
               } },
             'Whats going on in your local bars?'
+          ),
+          _react2.default.createElement(
+            'h3',
+            null,
+            'Enter your local town and tell people where your going tonight!'
           ),
           _react2.default.createElement(
             'form',
             { onSubmit: this.handleSubmit },
             _react2.default.createElement('input', {
-              ref: function ref(c) {
-                _this2.cityInput = c;
-              },
+              onChange: this.handleChange,
+              value: this.state.cityInput,
               placeholder: 'Please enter your area...',
               style: {
                 display: 'block',
+                fontSize: '1.5em',
                 margin: '0 auto',
-                width: '30em'
+                textAlign: 'center',
+                width: '100%'
               }
             })
           ),
-          _react2.default.createElement(Bars, { bars: this.state.bars, handleGoingClick: this.handleGoingClick })
+          !this.state.fetching ? _react2.default.createElement(Bars, { bars: this.state.bars, handleGoingClick: this.handleGoingClick }) : _react2.default.createElement(
+            'h2',
+            null,
+            'Loading...'
+          )
         )
       );
     }

@@ -18,6 +18,9 @@ exports.default = function (hash) {
     del: function del(field) {
       return _client2.default.hdel(hash, field);
     },
+    delAll: function delAll() {
+      return _client2.default.del(hash);
+    },
     set: function set(field, value) {
       return _client2.default.hset(hash, field, JSON.stringify(value));
     },

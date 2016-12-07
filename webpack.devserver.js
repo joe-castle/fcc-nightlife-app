@@ -10,7 +10,7 @@ new WebpackDevServer(webpack(config), {
     '*': 'http://localhost:3000'
   }
 })
-.listen(3001, 'localhost', (err, result) => {
+.listen(3001, (err, result) => {
   if (err) {
     console.log(`Error: ${err}`);
   }
