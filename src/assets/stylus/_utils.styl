@@ -1,0 +1,77 @@
+// ---------------------------------------------
+// ------ Variables
+// ---------------------------------------------
+text-font-stack = 'Source Sans Pro', 'Arial', sans-serif
+code-font-stack = 'Source Code Pro', 'Monaco', monospace
+
+breakpoints = {
+  mobile: 479px, // max-width,
+  mobileLandscape: '480 - 767'
+  tablet: '768px - 991',
+  desktop: 992
+}
+
+// Used in creating a meterial design box-shdaow
+z-depth-grades = {
+  '1': {
+    normal: '0 1px 4px 0 rgba(0,0,0,0.37)',
+    hover: '0 2px 2px 0 rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.3)'
+  },
+}
+
+
+// ---------------------------------------------
+// ------ Functions
+// ---------------------------------------------
+
+
+// ---------------------------------------------
+// ------ Mixins
+// ---------------------------------------------
+
+// Creates a material design style box-shadow.
+z-depth(grade, hover = false)
+  box-shadow: unquote(z-depth-grades[grade].normal)
+  transition box-shadow .2s linear
+
+  if hover
+    +hover-state()
+      box-shadow: unquote(z-depth-grades[grade].hover)
+
+// Save having to right hover, active and focus on all links.
+// TODO: Provide a transition for all hoverstates ?
+hover-state()
+  &:hover
+  &:active
+  &:focus
+    {block}
+
+// Nibs position Mixins
+-pos(type, args)
+  i = 0
+  position: unquote(type)
+  for j in (1..4)
+    if length(args) > i
+      {args[i]}: args[i + 1] is a 'unit' ? args[i += 1] : 0
+    i += 1
+
+fixed()
+  -pos('fixed', arguments)
+
+absolute()
+  -pos('absolute', arguments)
+
+relative()
+  -pos('relative', arguments)
+
+// Maintains the aspect ratio of a given element when resized
+aspect-ratio(width, height)
+  position relative
+
+  &::before
+    content ''
+    display block
+    padding-top (height / width) * 100%
+
+  > *
+    absolute top right bottom left
