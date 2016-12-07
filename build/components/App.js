@@ -143,8 +143,6 @@ var App = exports.App = function (_React$Component) {
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
       var _window$__INITIAL_STA = window.__INITIAL_STATE__,
           lastSearch = _window$__INITIAL_STA.lastSearch,
           authenticated = _window$__INITIAL_STA.authenticated;
@@ -158,9 +156,7 @@ var App = exports.App = function (_React$Component) {
 
       if (authenticated) {
         // Settimeout to ensure handleSubmit has correct cityInput as setState is async.
-        setTimeout(function () {
-          return _this2.handleSubmit();
-        }, 0);
+        setTimeout(this.handleSubmit, 0);
       }
     }
   }, {
