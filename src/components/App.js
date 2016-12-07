@@ -4,11 +4,11 @@ function Bars({ bars, handleGoingClick }) {
   return (
     <section>
       {bars.map(bar => (
-        <section key="bar.id">
+        <section key={bar.id}>
           <img src={bar.img_url} alt={bar.name}/>
           <h4>{bar.name}</h4>
           <p>{bar.description}</p>
-          <button onClick={() => handleGoingClick(bar.id)}>{`${bars.going.length} Going`}</button>
+          <button onClick={() => handleGoingClick(bar.id)}>{`${bar.going.length} Going`}</button>
         </section>
       ))}
     </section>
@@ -29,9 +29,9 @@ export class App extends React.Component {
   handleSubmit = ev => {
     ev.preventDefault();
 
-    fetch(`/api/bars?area=${ev.target.value}`)
+    fetch(`/api/bars?city=${this.cityInput.value}`)
       .then(res => res.json())
-      .then(json => console.log('json', json))
+      .then(bars => { this.setState({ bars })})
       .catch(error => console.log('error', error))
   }
 
