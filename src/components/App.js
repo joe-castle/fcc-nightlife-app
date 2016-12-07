@@ -68,7 +68,7 @@ export class App extends React.Component {
 
     if (authenticated) {
       // Settimeout to ensure handleSubmit has correct cityInput as setState is async.
-      setTimeout(() => this.handleSubmit(), 0);
+      setTimeout(this.handleSubmit, 0);
     }
   }
 
