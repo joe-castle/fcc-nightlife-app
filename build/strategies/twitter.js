@@ -27,7 +27,7 @@ try {
 
 _passport2.default.use(new _passportTwitter.Strategy({
   consumerKey: process.env.TWITTER_KEY || _keys.twitterStrategy.consumerKey,
-  consumerSecret: process.env.TWITTER_KEY || _keys.twitterStrategy.consumerSecret,
+  consumerSecret: process.env.TWITTER_SECRET || _keys.twitterStrategy.consumerSecret,
   callbackURL: process.env.NODE_ENV === 'production' ? 'http://fcc-nightlife2-app.herokuapp.com/auth/twitter/callback' : 'http://localhost:3001/auth/twitter/callback'
 }, function (token, tokenSecret, profile, done) {
   users.get(profile.id).then(function (user) {
