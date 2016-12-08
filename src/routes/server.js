@@ -94,6 +94,7 @@ app.get('/api/bars', (req, res) => {
 });
 
 app.put('/api/bars', ensureAuthenticated, (req, res) => {
+  console.log(process.env.TWITTER_KEY, process.env.TWITTER_SECRET);
   bars.get(req.query.bar)
     .then(bar => {
       let newBar;
