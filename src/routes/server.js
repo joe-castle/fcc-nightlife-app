@@ -8,7 +8,6 @@ import render from '../server-render';
 import passport from '../strategies/twitter';
 import client from '../data/client';
 import actions from '../data/actions';
-import _keys from '../_keys';
 
 const RedisStore = connectRedis(session);
 const app = express();
@@ -45,6 +44,13 @@ function resetDatabaseEveryDay() {
 }
 
 resetDatabaseEveryDay();
+
+let _keys;
+try {
+  _keys = require('../_keys');
+} catch (e) {
+  _keys = { yelp: {} };
+}
 
 app.use('/assets', express.static(`${__dirname}/../assets`));
 app.use(cookieParser());

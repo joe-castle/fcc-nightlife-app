@@ -2,9 +2,15 @@ import passport from 'passport';
 import { Strategy } from 'passport-twitter';
 
 import actions from '../data/actions';
-import _keys from '../_keys';
 
 const users = actions('users');
+
+let _keys;
+try {
+  _keys = require('../_keys');
+} catch (e) {
+  _keys = { twitterStrategy: {} };
+}
 
 passport.use(new Strategy({
     consumerKey: process.env.TWITTER_KEY || _keys.twitterStrategy.consumerKey,
