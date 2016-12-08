@@ -3,40 +3,27 @@ import axios from 'axios';
 
 function Bars({ bars, handleGoingClick }) {
   return (
-    <section style={{
-      marginTop: '20px',
-    }}>
+    <section className="row">
       {bars.map(bar => (
         <section 
+          className="card col-lg-4 col-md-6 col-sm-12"
           key={bar.id}
-          style={{
-            background: '#a2a5d5',
-            border: '3px solid #3a4bb8',
-            marginBottom: '10px',
-            padding: '10px',
-            textAlign: 'center',
-          }}
         >
           <img
-            style={{
-              border: '3px solid #3a4bb8',
-              borderRadius: '50%',
-              padding: '3px',
-            }} 
+            className="card-img-top"
             src={bar.img_url} 
             alt={bar.name}
           />
-          <h2>{bar.name}</h2>
-          <button
-            onClick={() => handleGoingClick(bar.id)}
-            style={{
-              border: '1px solid #3a4bb8',
-              padding: '10px',
-            }}
-          >
-            {`${bar.going.length} Going`}
-          </button>
-          <p style={{ fontStyle: 'italic'}}>{`"${bar.description}"`}</p>
+          <section className="card-block">
+            <h2 className="card-title">{bar.name}</h2>
+            <p className="card-text">{`"${bar.description}"`}</p>
+            <button
+              className="btn btn-primary"
+              onClick={() => handleGoingClick(bar.id)}
+            >
+              {`${bar.going.length} Going`}
+            </button>
+          </section>
         </section>
       ))}
     </section>
@@ -118,20 +105,24 @@ export class App extends React.Component {
           textAlign: 'center',
         }}>
           <h1 style={{
+            color: '#ddd',
             fontSize: '3em',
           }}>
             Whats going on in your local bars?
           </h1>
-          <h3>Enter your local town and tell people where your going tonight!</h3>
+          <h3 style={{ color: '#ddd'}}>
+            Enter your local town and tell people where your going tonight!
+          </h3>
           <form onSubmit={this.handleSubmit}>
             <input
+              className="form-control"
               onChange={this.handleChange}
               value={this.state.cityInput}
               placeholder="Please enter your area..."
               style={{
                 display: 'block',
                 fontSize: '1.5em',
-                margin: '0 auto',
+                margin: '20px auto',
                 textAlign: 'center',
                 width: '100%',
               }}
@@ -140,8 +131,11 @@ export class App extends React.Component {
           {
             !this.state.fetching 
               ? <Bars bars={this.state.bars} handleGoingClick={this.handleGoingClick} />
-              : <h2>Loading...</h2>
+              : <h2 style={{ color: '#ddd'}}>Loading...</h2>
           }
+          <section style={{ fontSize: '1.5em'}}>
+            Created for <a href="http://freecodecamp.com">freecodecamp.com</a>. Source @ <a href="https://github.com/joesmith100/fcc-nightlife-app">GitHub</a>
+          </section>
         </main>
       </div>
     );
