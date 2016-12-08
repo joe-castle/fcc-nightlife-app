@@ -147,10 +147,7 @@ app.put('/api/bars', ensureAuthenticated, function (req, res) {
   });
 });
 
-app.get('/auth/twitter', function (req, res, next) {
-  console.log(process.env.TWITTER_KEY, process.env.TWITTER_SECRET);
-  next();
-}, _twitter2.default.authenticate('twitter'));
+app.get('/auth/twitter', _twitter2.default.authenticate('twitter'));
 app.get('/auth/twitter/callback', _twitter2.default.authenticate('twitter', {
   successRedirect: '/',
   failureRedirect: '/'

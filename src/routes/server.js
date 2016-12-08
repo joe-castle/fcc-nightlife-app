@@ -112,10 +112,7 @@ app.put('/api/bars', ensureAuthenticated, (req, res) => {
     })
 });
 
-app.get('/auth/twitter', (req,res,next) => {
-    console.log(process.env.TWITTER_KEY, process.env.TWITTER_SECRET);
-    next();
-}, passport.authenticate('twitter'));
+app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {
   successRedirect: '/',
   failureRedirect: '/',
