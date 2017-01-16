@@ -3,28 +3,33 @@ import axios from 'axios';
 
 function Bars({ bars, handleGoingClick }) {
   return (
-    <section className="row">
+    <section className="row" style={{ maxWidth: '800px', margin: '0 auto'}}>
       {bars.map(bar => (
-        <section 
-          className="card col-lg-4 col-md-6 col-sm-12"
+        <div
+          className="col-lg-4 col-md-6 col-sm-12"
           key={bar.id}
         >
-          <img
-            className="card-img-top"
-            src={bar.img_url} 
-            alt={bar.name}
-          />
-          <section className="card-block">
-            <h2 className="card-title">{bar.name}</h2>
-            <p className="card-text">{`"${bar.description}"`}</p>
-            <button
-              className="btn btn-primary"
-              onClick={() => handleGoingClick(bar.id)}
-            >
-              {`${bar.going.length} Going`}
-            </button>
-          </section>
-        </section>
+          <div 
+            className="card" 
+            style={{ padding: '5px' }}
+          >
+            <img
+              className="card-img-top"
+              src={bar.img_url} 
+              alt={bar.name}
+            />
+            <div className="card-block">
+              <h2 className="card-title">{bar.name}</h2>
+              <p className="card-text">{`"${bar.description}"`}</p>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleGoingClick(bar.id)}
+              >
+                {`${bar.going.length} Going`}
+              </button>
+            </div>
+          </div>
+        </div>
       ))}
     </section>
   );
@@ -99,39 +104,42 @@ export class App extends React.Component {
     return (
       <div className="App">
         <main style={{
-          margin: '0 auto',
-          maxWidth: '800px',
           padding: '10px',
           textAlign: 'center',
         }}>
-          <h1 style={{
-            color: '#ddd',
-            fontSize: '3em',
+          <div className="jumbotron" style={{
+            width: '100%'
           }}>
-            Whats going on in your local bars?
-          </h1>
-          <h3 style={{ color: '#ddd'}}>
-            Enter your local town and tell people where your going tonight!
-          </h3>
-          <form onSubmit={this.handleSubmit}>
-            <input
-              className="form-control"
-              onChange={this.handleChange}
-              value={this.state.cityInput}
-              placeholder="Please enter your area..."
-              style={{
-                display: 'block',
-                fontSize: '1.5em',
-                margin: '20px auto',
-                textAlign: 'center',
-                width: '100%',
-              }}
-            />
-          </form>
+            <h1 style={{
+              color: '#505ede',
+              fontSize: '3em',
+            }}>
+              Whats going on in your local bars?
+            </h1>
+            <h3 style={{ color: '#777'}}>
+              Enter your city and tell people where your going tonight!
+            </h3>
+            <form onSubmit={this.handleSubmit}>
+              <input
+                className="form-control"
+                onChange={this.handleChange}
+                value={this.state.cityInput}
+                placeholder="Enter your city..."
+                style={{
+                  display: 'block',
+                  fontSize: '1.5em',
+                  margin: '20px auto',
+                  textAlign: 'center',
+                  width: '100%',
+                  maxWidth: '500px'
+                }}
+              />
+            </form>
+          </div>
           {
             !this.state.fetching 
               ? <Bars bars={this.state.bars} handleGoingClick={this.handleGoingClick} />
-              : <h2 style={{ color: '#ddd'}}>Loading...</h2>
+              : <h2 style={{ color: '#555'}}>Loading...</h2>
           }
           <section style={{ fontSize: '1.5em'}}>
             Created for <a href="http://freecodecamp.com">freecodecamp.com</a>. Source @ <a href="https://github.com/joesmith100/fcc-nightlife-app">GitHub</a>
